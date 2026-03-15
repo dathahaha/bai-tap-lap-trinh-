@@ -1,0 +1,17 @@
+def breakfast_time():
+    start = 6*3600 + 52*60
+
+    easy = 8*60 + 15
+    tempo = 7*60 + 12
+
+    total_run = easy + 3*tempo + easy
+
+    finish = start + total_run
+
+    hour = finish // 3600
+    minute = (finish % 3600) // 60
+    second = finish % 60
+
+    print("Breakfast time:", hour, ":", minute, ":", second)
+
+breakfast_time()
