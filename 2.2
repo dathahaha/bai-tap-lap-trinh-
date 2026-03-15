@@ -1,0 +1,13 @@
+price = 24.95
+discount = 0.40
+copies = 60
+
+discount_price = price * (1 - discount)
+
+book_cost = discount_price * copies
+
+shipping = 3 + (copies - 1) * 0.75
+
+total_cost = book_cost + shipping
+
+print("Total wholesale cost:", total_cost)
