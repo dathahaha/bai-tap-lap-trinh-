@@ -1,0 +1,23 @@
+import time
+
+# lấy số giây từ epoch
+current_time = time.time()
+
+# số ngày
+days = int(current_time // (24 * 3600))
+
+# phần giây còn lại trong ngày
+remaining_seconds = current_time % (24 * 3600)
+
+# tính giờ
+hours = int(remaining_seconds // 3600)
+
+# tính phút
+remaining_seconds = remaining_seconds % 3600
+minutes = int(remaining_seconds // 60)
+
+# tính giây
+seconds = int(remaining_seconds % 60)
+
+print("Days since epoch:", days)
+print("Current time:", hours, ":", minutes, ":", seconds)
