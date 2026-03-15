@@ -1,10 +1,16 @@
 minutes = 42
 seconds = 42
 kilometers = 10
+
 total_seconds = minutes * 60 + seconds
 miles = kilometers / 1.61
+
+
 hours = total_seconds / 3600
+
 pace = total_seconds / miles
+
 speed = miles / hours
+
 print("Pace (seconds per mile):", pace)
 print("Speed (miles per hour):", speed)
