@@ -1,23 +1,60 @@
-# 1. Seconds in 42 minutes 42 seconds
-seconds = 42 * 60 + 42
-print("Total seconds:", seconds)
+import math
 
-# 2. Miles in 10 kilometers
-km = 10
-miles = km / 1.61
-print("Miles:", miles)
+# Define Point
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-# 3. Average pace and speed
-total_seconds = 42 * 60 + 42
-total_hours = total_seconds / 3600
+# Define Circle
+class Circle:
+    def __init__(self, center, radius):
+        self.center = center
+        self.radius = radius
 
-# Pace (seconds per mile)
-pace_sec_per_mile = total_seconds / miles
-pace_min = int(pace_sec_per_mile // 60)
-pace_sec = int(pace_sec_per_mile % 60)
+# Define Rectangle
+class Rectangle:
+    def __init__(self, corner, width, height):
+        self.corner = corner  # bottom-left point
+        self.width = width
+        self.height = height
 
-# Speed (miles per hour)
-speed = miles / total_hours
 
-print("Pace:", pace_min, "min", pace_sec, "sec per mile")
-print("Speed:", speed, "mph")
+# Check if point in circle
+def point_in_circle(circle, point):
+    dx = point.x - circle.center.x
+    dy = point.y - circle.center.y
+    distance = math.sqrt(dx**2 + dy**2)
+    return distance <= circle.radius
+
+
+# Get rectangle corners
+def rect_corners(rect):
+    x, y = rect.corner.x, rect.corner.y
+    return [
+        Point(x, y),
+        Point(x + rect.width, y),
+        Point(x, y + rect.height),
+        Point(x + rect.width, y + rect.height)
+    ]
+
+
+# Check if rectangle fully inside circle
+def rect_in_circle(circle, rect):
+    return all(point_in_circle(circle, p) for p in rect_corners(rect))
+
+
+# Check if rectangle overlaps circle (any corner inside)
+def rect_circle_overlap(circle, rect):
+    return any(point_in_circle(circle, p) for p in rect_corners(rect))
+
+
+# ----- Test -----
+center = Point(150, 100)
+circle = Circle(center, 75)
+
+rect = Rectangle(Point(140, 90), 30, 20)
+
+print("Point in circle:", point_in_circle(circle, Point(150, 100)))
+print("Rectangle in circle:", rect_in_circle(circle, rect))
+print("Rectangle overlap circle:", rect_circle_overlap(circle, rect))
