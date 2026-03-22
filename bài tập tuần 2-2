@@ -1,0 +1,20 @@
+import time
+
+# current time in seconds since epoch
+t = int(time.time())
+
+# days since epoch
+days = t // 86400
+
+# seconds left in current day
+t %= 86400
+
+# convert to h:m:s
+hours = t // 3600
+t %= 3600
+
+minutes = t // 60
+seconds = t % 60
+
+print(f"Days since epoch: {days}")
+print(f"Current time: {hours:02d}:{minutes:02d}:{seconds:02d}")
