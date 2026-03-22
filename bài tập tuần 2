@@ -1,0 +1,23 @@
+# 1. Seconds in 42 minutes 42 seconds
+seconds = 42 * 60 + 42
+print("Total seconds:", seconds)
+
+# 2. Miles in 10 kilometers
+km = 10
+miles = km / 1.61
+print("Miles:", miles)
+
+# 3. Average pace and speed
+total_seconds = 42 * 60 + 42
+total_hours = total_seconds / 3600
+
+# Pace (seconds per mile)
+pace_sec_per_mile = total_seconds / miles
+pace_min = int(pace_sec_per_mile // 60)
+pace_sec = int(pace_sec_per_mile % 60)
+
+# Speed (miles per hour)
+speed = miles / total_hours
+
+print("Pace:", pace_min, "min", pace_sec, "sec per mile")
+print("Speed:", speed, "mph")
