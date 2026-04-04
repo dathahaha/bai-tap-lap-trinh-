@@ -1,34 +1,120 @@
+
 class CanBo:
-    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi):
-        self.ho_ten = ho_ten
-        self.tuoi = tuoi
-        self.gioi_tinh = gioi_tinh
-        self.dia_chi = dia_chi
+    def __init__(self, ten, tuoi, gioitinh, diachi):
+        self._ten = ten
+        self._tuoi = tuoi
+        self._gioitinh = gioitinh
+        self._diachi = diachi
 
     def __str__(self):
-        return f"Họ tên: {self.ho_ten}, Tuổi: {self.tuoi}, Giới tính: {self.gioi_tinh}, Địa chỉ: {self.dia_chi}"
+        return f"Ten: {self._ten}, Tuoi: {self._tuoi}, GioiTinh: {self._gioitinh}, DiaChi: {self._diachi}"
 
 
 class CongNhan(CanBo):
-    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, bac):
-        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
-        self.bac = bac
+    def __init__(self, ten, tuoi, gioitinh, diachi, bac):
+        super().__init__(ten, tuoi, gioitinh, diachi)
+        self._bac = bac
 
     def __str__(self):
-        return super().__str__() + f", Bậc: {self.bac}"
+        return super().__str__() + f", Bac: {self._bac}"
+
 
 class KySu(CanBo):
-    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, chucvu):
-        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
-        self.chucvu = chucvu
+    def __init__(self, ten, tuoi, gioitinh, diachi, nganh):
+        super().__init__(ten, tuoi, gioitinh, diachi)
+        self._nganh = nganh
 
     def __str__(self):
-        return super().__str__() + f", ChucVU: {self.chucvu}"
+        return super().__str__() + f", Nganh: {self._nganh}"
 
 
-cn = CongNhan("Nguyen Van A", 30, "Nam", "Ha Noi", 5)
-ks = KySu("Nguyen Van A", 30, "Nam", "Ha Noi", 'GiamDoc')
+class NhanVien(CanBo):
+    def __init__(self, ten, tuoi, gioitinh, diachi, congviec):
+        super().__init__(ten, tuoi, gioitinh, diachi)
+        self._congviec = congviec
+
+    def __str__(self):
+        return super().__str__() + f", CongViec: {self._congviec}"
 
 
-print(cn)
-print(ks)
+
+class QLCB:
+    def __init__(self):
+        self.ds = []
+
+    # Thêm cán bộ
+    def them(self, cb):
+        self.ds.append(cb)
+        print("Đã thêm!")
+
+    # Tìm kiếm theo tên
+    def tim(self, ten):
+        found = False
+        for cb in self.ds:
+            if ten.lower() in cb._ten.lower():
+                print(cb)
+                found = True
+        if not found:
+            print("Không tìm thấy!")
+
+
+    def hien_thi(self):
+        if not self.ds:
+            print("Danh sách trống!")
+        else:
+            for cb in self.ds:
+                print(cb)
+
+
+
+ql = QLCB()
+
+while True:
+    print("\n===== MENU =====")
+    print("1. Thêm cán bộ")
+    print("2. Tìm theo tên")
+    print("3. Hiển thị danh sách")
+    print("4. Thoát")
+
+    chon = input("Chọn: ")
+
+    if chon == "1":
+        loai = input("1.Công nhân | 2.Kỹ sư | 3.Nhân viên: ")
+
+        ten = input("Họ tên: ")
+        tuoi = int(input("Tuổi: "))
+        gt = input("Giới tính: ")
+        dc = input("Địa chỉ: ")
+
+        if loai == "1":
+            bac = int(input("Bậc: "))
+            cb = CongNhan(ten, tuoi, gt, dc, bac)
+
+        elif loai == "2":
+            nganh = input("Ngành: ")
+            cb = KySu(ten, tuoi, gt, dc, nganh)
+
+        elif loai == "3":
+            cv = input("Công việc: ")
+            cb = NhanVien(ten, tuoi, gt, dc, cv)
+
+        else:
+            print("Sai loại!")
+            continue
+
+        ql.them(cb)
+
+    elif chon == "2":
+        ten = input("Nhập tên cần tìm: ")
+        ql.tim(ten)
+
+    elif chon == "3":
+        ql.hien_thi()
+
+    elif chon == "4":
+        print("Bye!")
+        break
+
+    else:
+        print("Chọn sai!")
+
