@@ -1,0 +1,109 @@
+from math import gcd
+
+
+
+class MauSoBangKhong(Exception):
+    pass
+
+
+class PhanSo:
+    def __init__(self, tu_so, mau_so):
+        self.tu_so = tu_so
+        self.mau_so = mau_so
+
+
+    @property
+    def tu_so(self):
+        return self._tu_so
+
+    @tu_so.setter
+    def tu_so(self, value):
+        self._tu_so = value
+
+    @property
+    def mau_so(self):
+        return self._mau_so
+
+    @mau_so.setter
+    def mau_so(self, value):
+        if value == 0:
+            raise MauSoBangKhong("Mau so khong duoc bang 0")
+        self._mau_so = value
+
+
+    def is_toi_gian(self):
+        return gcd(self.tu_so, self.mau_so) == 1
+
+
+    def toi_gian(self):
+        ucln = gcd(self.tu_so, self.mau_so)
+        return PhanSo(self.tu_so // ucln, self.mau_so // ucln)
+
+    # ===== CONG =====
+    def __add__(self, other):
+        tu = self.tu_so * other.mau_so + other.tu_so * self.mau_so
+        mau = self.mau_so * other.mau_so
+        return PhanSo(tu, mau).toi_gian()
+
+
+    def __sub__(self, other):
+        tu = self.tu_so * other.mau_so - other.tu_so * self.mau_so
+        mau = self.mau_so * other.mau_so
+        return PhanSo(tu, mau).toi_gian()
+
+
+    def __mul__(self, other):
+        tu = self.tu_so * other.tu_so
+        mau = self.mau_so * other.mau_so
+        return PhanSo(tu, mau).toi_gian()
+
+
+    def __truediv__(self, other):
+        tu = self.tu_so * other.mau_so
+        mau = self.mau_so * other.tu_so
+        return PhanSo(tu, mau).toi_gian()
+
+    def __eq__(self, other):
+        return self.tu_so * other.mau_so == other.tu_so * self.mau_so
+
+    def __lt__(self, other):
+        return self.tu_so * other.mau_so < other.tu_so * self.mau_so
+
+    def __gt__(self, other):
+        return self.tu_so * other.mau_so > other.tu_so * self.mau_so
+
+
+    def __str__(self):
+        ps = self.toi_gian()
+        if ps.mau_so == 1:
+            return str(ps.tu_so)
+        return f"{ps.tu_so}/{ps.mau_so}"
+
+    def __repr__(self):
+        return f"PhanSo({self.tu_so}, {self.mau_so})"
+
+  
+    def __hash__(self):
+        ps = self.toi_gian()
+        return hash((ps.tu_so, ps.mau_so))
+
+
+if __name__ == "__main__":
+    ds = []
+
+    n = int(input("Nhap so luong phan so: "))
+
+    for i in range(n):
+        print(f"\nPhan so thu {i+1}:")
+        tu = int(input("Tu so: "))
+        mau = int(input("Mau so: "))
+        ds.append(PhanSo(tu, mau))
+
+    print("\nDanh sach phan so toi gian:")
+    for ps in ds:
+        print(ps)
+
+    print("\nDanh sach sau khi sap xep tang dan:")
+    ds_sorted = sorted(ds)
+    for ps in ds_sorted:
+        print(ps)
