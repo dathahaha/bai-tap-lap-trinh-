@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 
 
+
 class GiaKhongHopLe(Exception):
     pass
 
 
 class MaHangTrungLap(Exception):
     pass
+
 
 
 class HangHoa(ABC):
@@ -22,7 +24,7 @@ class HangHoa(ABC):
     @gia.setter
     def gia(self, value):
         if value < 0:
-            raise GiaKhongHopLe("Giá phải >= 0")
+            raise GiaKhongHopLe("Gia phai >= 0")
         self._gia = value
 
     @abstractmethod
@@ -49,7 +51,7 @@ class HangDienMay(HangHoa):
         self.bao_hanh = bao_hanh
 
     def inTTin(self):
-        return f"Điện máy | {self.ma_hang} | {self.ten_hang} | {self.gia} | BH: {self.bao_hanh} tháng"
+        return f"Dien May | {self.ma_hang} | {self.ten_hang} | {self.gia} | Bao hanh: {self.bao_hanh} thang"
 
 
 class HangSanhSu(HangHoa):
@@ -58,7 +60,7 @@ class HangSanhSu(HangHoa):
         self.chat_lieu = chat_lieu
 
     def inTTin(self):
-        return f"Sành sứ | {self.ma_hang} | {self.ten_hang} | {self.gia} | Chất liệu: {self.chat_lieu}"
+        return f"Sanh Su | {self.ma_hang} | {self.ten_hang} | {self.gia} | Chat lieu: {self.chat_lieu}"
 
 
 class HangThucPham(HangHoa):
@@ -67,7 +69,7 @@ class HangThucPham(HangHoa):
         self.han_su_dung = han_su_dung
 
     def inTTin(self):
-        return f"Thực phẩm | {self.ma_hang} | {self.ten_hang} | {self.gia} | HSD: {self.han_su_dung}"
+        return f"Thuc Pham | {self.ma_hang} | {self.ten_hang} | {self.gia} | HSD: {self.han_su_dung}"
 
 
 
@@ -78,10 +80,13 @@ class QuanLyHangHoa:
     def them(self, hang):
         for h in self.ds:
             if h.ma_hang == hang.ma_hang:
-                raise MaHangTrungLap("Mã hàng bị trùng")
+                raise MaHangTrungLap("Ma hang bi trung!")
         self.ds.append(hang)
 
     def hien_thi(self):
+        if not self.ds:
+            print("Danh sach rong!")
+            return
         for h in self.ds:
             print(h)
 
@@ -92,3 +97,71 @@ class QuanLyHangHoa:
         with open(ten_file, "w", encoding="utf-8") as f:
             for h in self.ds:
                 f.write(h.inTTin() + "\n")
+
+
+
+def menu():
+    ql = QuanLyHangHoa()
+
+    while True:
+        print("\n===== QUAN LY HANG HOA =====")
+        print("1. Them hang")
+        print("2. Hien thi danh sach")
+        print("3. Sap xep theo gia")
+        print("4. Luu file")
+        print("5. Thoat")
+
+        chon = input("Nhap lua chon: ")
+
+        try:
+            if chon == "1":
+                loai = input("1.Dien May  2.Sanh Su  3.Thuc Pham: ")
+
+                ma = input("Ma hang: ")
+                ten = input("Ten hang: ")
+                gia = float(input("Gia: "))
+
+                if loai == "1":
+                    bh = int(input("Bao hanh(thang): "))
+                    h = HangDienMay(ma, ten, gia, bh)
+
+                elif loai == "2":
+                    cl = input("Chat lieu: ")
+                    h = HangSanhSu(ma, ten, gia, cl)
+
+                elif loai == "3":
+                    hsd = input("Han su dung: ")
+                    h = HangThucPham(ma, ten, gia, hsd)
+
+                else:
+                    print("Loai khong hop le!")
+                    continue
+
+                ql.them(h)
+                print("Them thanh cong!")
+
+            elif chon == "2":
+                ql.hien_thi()
+
+            elif chon == "3":
+                ql.sap_xep_theo_gia()
+                print("Da sap xep!")
+
+            elif chon == "4":
+                ql.luu_file("hanghoa.txt")
+                print("Da luu file!")
+
+            elif chon == "5":
+                print("Tam biet!")
+                break
+
+            else:
+                print("Lua chon khong hop le!")
+
+        except Exception as e:
+            print("Loi:", e)
+
+
+
+if __name__ == "__main__":
+    menu()
