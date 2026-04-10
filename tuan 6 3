@@ -1,0 +1,172 @@
+from abc import ABC, abstractmethod
+
+
+
+class TuoiKhongHopLe(Exception):
+    pass
+
+
+class BacKhongHopLe(Exception):
+    pass
+
+
+
+class CanBo(ABC):
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi):
+        self.ho_ten = ho_ten
+        self.tuoi = tuoi
+        self.gioi_tinh = gioi_tinh
+        self.dia_chi = dia_chi
+
+    @property
+    def tuoi(self):
+        return self._tuoi
+
+    @tuoi.setter
+    def tuoi(self, value):
+        if value < 18 or value > 65:
+            raise TuoiKhongHopLe("Tuoi phai tu 18 den 65")
+        self._tuoi = value
+
+    @abstractmethod
+    def mo_ta(self):
+        pass
+
+    def __str__(self):
+        return self.mo_ta()
+
+    def __repr__(self):
+        return self.mo_ta()
+
+    def __eq__(self, other):
+        return self.ho_ten == other.ho_ten and self.tuoi == other.tuoi
+
+    def __lt__(self, other):
+        return self.ho_ten < other.ho_ten
+
+
+# ===== CAC LOAI CAN BO =====
+class CongNhan(CanBo):
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, bac):
+        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
+        if bac < 1 or bac > 10:
+            raise BacKhongHopLe("Bac phai tu 1 den 10")
+        self.bac = bac
+
+    def mo_ta(self):
+        return f"Cong Nhan | {self.ho_ten} | {self.tuoi} | {self.gioi_tinh} | {self.dia_chi} | Bac: {self.bac}"
+
+
+class KySu(CanBo):
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, nganh):
+        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
+        self.nganh = nganh
+
+    def mo_ta(self):
+        return f"Ky Su | {self.ho_ten} | {self.tuoi} | {self.gioi_tinh} | {self.dia_chi} | Nganh: {self.nganh}"
+
+
+class NhanVien(CanBo):
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, cong_viec):
+        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
+        self.cong_viec = cong_viec
+
+    def mo_ta(self):
+        return f"Nhan Vien | {self.ho_ten} | {self.tuoi} | {self.gioi_tinh} | {self.dia_chi} | Cong viec: {self.cong_viec}"
+
+
+
+class QLCB:
+    def __init__(self):
+        self.ds = []
+
+    def them(self, cb):
+        self.ds.append(cb)
+
+    def tim(self, ten):
+        for cb in self.ds:
+            if ten.lower() in cb.ho_ten.lower():
+                print(cb)
+
+    def hien_thi(self):
+        for cb in self.ds:
+            print(cb)
+
+    def sap_xep(self):
+        self.ds.sort()
+
+    def luu_file(self, ten_file):
+        with open(ten_file, "w", encoding="utf-8") as f:
+            for cb in self.ds:
+                f.write(cb.mo_ta() + "\n")
+
+
+
+def menu():
+    ql = QLCB()
+
+    while True:
+        print("\n===== QUAN LY CAN BO =====")
+        print("1. Them can bo")
+        print("2. Tim theo ten")
+        print("3. Hien thi danh sach")
+        print("4. Sap xep theo ten")
+        print("5. Luu file")
+        print("6. Thoat")
+
+        chon = input("Nhap lua chon: ")
+
+        try:
+            if chon == "1":
+                loai = input("1.Cong Nhan 2.Ky Su 3.Nhan Vien: ")
+
+                ten = input("Ho ten: ")
+                tuoi = int(input("Tuoi: "))
+                gt = input("Gioi tinh: ")
+                dc = input("Dia chi: ")
+
+                if loai == "1":
+                    bac = int(input("Bac: "))
+                    cb = CongNhan(ten, tuoi, gt, dc, bac)
+
+                elif loai == "2":
+                    nganh = input("Nganh: ")
+                    cb = KySu(ten, tuoi, gt, dc, nganh)
+
+                elif loai == "3":
+                    cv = input("Cong viec: ")
+                    cb = NhanVien(ten, tuoi, gt, dc, cv)
+
+                else:
+                    print("Loai khong hop le!")
+                    continue
+
+                ql.them(cb)
+
+            elif chon == "2":
+                ten = input("Nhap ten can tim: ")
+                ql.tim(ten)
+
+            elif chon == "3":
+                ql.hien_thi()
+
+            elif chon == "4":
+                ql.sap_xep()
+                print("Da sap xep!")
+
+            elif chon == "5":
+                ql.luu_file("canbo.txt")
+                print("Da luu file!")
+
+            elif chon == "6":
+                break
+
+            else:
+                print("Lua chon khong hop le!")
+
+        except Exception as e:
+            print("Loi:", e)
+
+
+if __name__ == "__main__":
+    menu()
